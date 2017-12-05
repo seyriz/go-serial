@@ -5,6 +5,10 @@
 //
 
 package enumerator // import "go.bug.st/serial.v1/enumerator"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 //go:generate go run $GOROOT/src/syscall/mksyscall_windows.go -output syscall_windows.go usb_windows.go
 
@@ -17,8 +21,8 @@ type PortDetails struct {
 	PID          string
 	SerialNumber string
 
-	// Manufacturer string
-	// Product      string
+	 Manufacturer string
+	 Product      string
 }
 
 // GetDetailedPortsList retrieve ports details like USB VID/PID.
@@ -40,4 +44,14 @@ func (e PortEnumerationError) Error() string {
 		reason += ": " + e.causedBy.Error()
 	}
 	return reason
+}
+
+func (p PortDetails) String() string {
+	j, err := json.Marshal(p)
+	if err != nil {
+		return "PORT NIL"
+	} else {
+		return fmt.Sprintf("PORT: %s", string(j))
+	}
+	return fmt.Sprintf("Port: %s",)
 }
